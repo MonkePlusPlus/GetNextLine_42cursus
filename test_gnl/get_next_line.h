@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 15:46:44 by ptheo             #+#    #+#             */
-/*   Updated: 2024/05/19 18:24:24 by ptheo            ###   ########.fr       */
+/*   Created: 2024/04/15 15:46:49 by ptheo             #+#    #+#             */
+/*   Updated: 2024/05/19 19:28:03 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+# include <fcntl.h>
+# include <unistd.h>
+# include <stdlib.h>
 
-char	*get_next_line(int fd)
-{
-	char *result;
+char	*get_next_line(int fd);
+char	*rebuf(char *buf, int len);
+char	*conmalloc(char *result, char *buf, int len);
+int		ft_strlen(char *str);
 
-	result = get_next_line_aux(fd, result, 0);
-	return (result);
-}
+#endif

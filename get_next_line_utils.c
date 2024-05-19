@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:46:54 by ptheo             #+#    #+#             */
-/*   Updated: 2024/04/15 15:46:55 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/05/19 18:25:00 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*get_next_line_aux(int fd, int len)
 {
-	static char	*result;
+	static char *result;
 	char		*buf;
 	int			temp;
 	int			i;
