@@ -6,81 +6,71 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:46:54 by ptheo             #+#    #+#             */
-/*   Updated: 2024/05/19 18:25:00 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/05/19 19:32:38 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*get_next_line_aux(int fd, int len)
+int	ft_strlen(char *str)
 {
-	static char *result;
-	char		*buf;
-	int			temp;
-	int			i;
+	int	i;
 
 	i = 0;
-	buf = malloc(BUFFER_SIZE * sizeof(char));
-	if (!buf)
-		return (NULL);
-	temp = read(fd, buf, BUFFER_SIZE);
-	if (temp == 0)
+	if (str != NULL)
 	{
-		if (len == 0)
-		{
-			free(buf);
-			return (NULL);
-		}
-		result = malloc((len + 1) * sizeof(char));
-		if (!result)
-			return (NULL);
-		result[len] = 0;
-		free(buf);
-	}
-	else if (temp == -1)
-	{
-		free(buf);
-		return (NULL);
-	}
-	else 
-	{
-		while (buf[i] && i < BUFFER_SIZE && buf[i] != '\n')
+		while (str[i])
 			i++;
-		if (buf[i] == '\n')
-		{
-			result = malloc((len + i + 2) * sizeof(char));
-			if (!result)
-				return (NULL);
-			result[len + i + 1] = 0;
-			i = 0;
-			while(buf[i] && buf[i] != '\n')
-				result[len++] = buf[i++];
-			result[len + i] = '\n';
-			free(buf);
-		}
-		else if (buf[i] == 0 && i < BUFFER_SIZE)
-		{
-			result = malloc((len + i + 1) * sizeof(char));
-			if (!result)
-				return (NULL);
-			result[len + i] = 0;
-			i = 0;
-			while (buf[i])
-				result[len++] = buf[i++];
-			free(buf);
-		}
-		else
-		{
-			if (!get_next_line_aux(fd, len + BUFFER_SIZE))
-			{
-				free(buf);
-				return (NULL);
-			}
-			i = 0;
-			while (i < BUFFER_SIZE)
-				result[len++] = buf[i++];
-			free(buf);
-		}
 	}
-	return (result);
+	return (i);
+}
+
+char	*rebuf(char *buf, int len)
+{
+	int	i;
+
+	i = 0;
+	if (buf[len] == '\n')
+		len++;
+	while (buf[len])
+		buf[i++] = buf[len++];
+	while (buf[i])
+		buf[i++] = '\0';
+	return (buf);
+}
+
+void	ft_bzero(char *buf, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+		buf[i++] = 0;
+}
+
+char	*conmalloc(char	*result, char *buf, int len)
+{
+	char	*final;
+	int		i;
+	int		len_res;
+
+	if (buf[len] == '\n')
+		len++;
+	if (len <= 0)
+		return (result);
+	len_res = ft_strlen(result);
+	final = (char *)malloc((len_res + len + 1) * sizeof(char));
+	if (final == NULL)
+		return (NULL);
+	i = -1;
+	while (++i < len_res)
+		final[i] = result[i];
+	while (i < len_res + len)
+	{
+		final[i] = buf[i - len_res];
+		i++;
+	}
+	final[len_res + len] = '\0';
+	free(result);
+	return (final);
 }

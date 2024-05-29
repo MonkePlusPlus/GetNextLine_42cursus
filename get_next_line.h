@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:46:49 by ptheo             #+#    #+#             */
-/*   Updated: 2024/05/19 18:25:11 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/05/19 19:28:03 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
-char	*get_next_line_aux(int fd, int len);
+char	*get_next_line_aux(int fd, char buf[BUFFER_SIZE], char *result, int i);
+char	*rebuf(char *buf, int len);
+char	*conmalloc(char *result, char *buf, int len);
+void	ft_bzero(char *buf, int len);
+int		ft_strlen(char *str);
 
 #endif
