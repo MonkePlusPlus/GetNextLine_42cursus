@@ -41,7 +41,7 @@ char	*get_next_line_aux(int fd, char *buf, char *result, int i)
 		return (NULL);
 	ft_bzero(line, BUFFER_SIZE);
 	buf = line;
-	current = read(fd, buf, BUFFER_SIZE);
+	current = read(fd, line, BUFFER_SIZE);
 	while (current > -1)
 	{
 		i = 0;
@@ -49,10 +49,14 @@ char	*get_next_line_aux(int fd, char *buf, char *result, int i)
 			i++;
 		result = conmalloc(result, line, i);
 		if (result == NULL)
+		{
+			free(line);
 			return (NULL);
+		}
 		if (line[i] == '\n')
 		{
 			rebuf(line, i);
+			free(line);
 			return (result);
 		}
 		if (current == 0)
@@ -61,10 +65,6 @@ char	*get_next_line_aux(int fd, char *buf, char *result, int i)
 			free(line);
 			return (result);
 		}
-		free(line);
-		line = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if (line == NULL)
-			return (NULL);
 		ft_bzero(line, BUFFER_SIZE);
 		current = read(fd, line, BUFFER_SIZE);
 	}
@@ -97,8 +97,10 @@ char	*get_next_line(int fd)
 		if (line[i] == '\n')
 		{
 			rebuf(line, i);
+			free(line);
 			return (result);
 		}
+		free(line);
 	}
 	return (get_next_line_aux(fd, buf, result, i));
 }
@@ -111,6 +113,7 @@ int	main(int ac, char **av)
 	//get_next_line(fd);
 	//get_next_line(fd);
 	ft_putstr(get_next_line(fd));
+	
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
@@ -121,5 +124,4 @@ int	main(int ac, char **av)
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
 	return (0);	
-}
-*/
+}*/
