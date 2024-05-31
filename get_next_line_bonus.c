@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 15:46:44 by ptheo             #+#    #+#             */
-/*   Updated: 2024/05/30 16:50:48 by ptheo            ###   ########.fr       */
+/*   Created: 2024/05/30 15:18:24 by ptheo             #+#    #+#             */
+/*   Updated: 2024/05/30 15:55:23 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	ft_putchar(char c)
 {
@@ -31,72 +31,54 @@ void	ft_putstr(char *str)
 	}
 }
 
-char	*get_next_line_aux(int fd, char *buf, char *result, int i)
+char	*get_next_line_aux(int fd, char buf[1025][BUFFER_SIZE], char *result,
+	int i)
 {
-	char	*line;
-	int		current;
+	int	current;
 
-	line = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (line == NULL)
-		return (NULL);
-	ft_bzero(line, BUFFER_SIZE);
-	buf = line;
-	current = read(fd, buf, BUFFER_SIZE);
+	rebuf(buf, BUFFER_SIZE, fd);
+	current = read(fd, buf[fd], BUFFER_SIZE);
 	while (current > -1)
 	{
 		i = 0;
-		while (line[i] && line[i] != '\n' && i < BUFFER_SIZE)
+		while (buf[fd][i] && buf[fd][i] != '\n' && i < BUFFER_SIZE)
 			i++;
-		result = conmalloc(result, line, i);
+		result = conmalloc(result, buf, i, fd);
 		if (result == NULL)
 			return (NULL);
-		if (line[i] == '\n')
+		if (buf[fd][i] == '\n' || current == 0)
 		{
-			rebuf(line, i);
+			rebuf(buf, i, fd);
 			return (result);
 		}
-		if (current == 0)
-		{
-			buf = NULL;
-			free(line);
-			return (result);
-		}
-		free(line);
-		line = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if (line == NULL)
-			return (NULL);
-		ft_bzero(line, BUFFER_SIZE);
-		current = read(fd, line, BUFFER_SIZE);
+		ft_bzero(buf, BUFFER_SIZE, fd);
+		current = read(fd, buf[fd], BUFFER_SIZE);
 	}
-	free(line);
+	ft_bzero(buf, BUFFER_SIZE, fd);
 	free(result);
-	buf = NULL;
 	return (NULL);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*buf;
-	char		*line;
+	static char	buf[1025][BUFFER_SIZE];
 	char		*result;
 	int			i;
 
 	result = NULL;
 	i = 0;
-	line = NULL;
-	if (buf != NULL)
+	if (buf[fd][0] != '\0')
 	{
-		line = buf;
-		while (line[i] && line[i] != '\n' && i < BUFFER_SIZE)
+		while (buf[fd][i] && buf[fd][i] != '\n' && i < BUFFER_SIZE)
 			i++;
-		result = conmalloc(result, line, i);
+		result = conmalloc(result, buf, i, fd);
 		if (result == NULL)
 		{
 			return (NULL);
 		}
-		if (line[i] == '\n')
+		if (buf[fd][i] == '\n')
 		{
-			rebuf(line, i);
+			rebuf(buf, i, fd);
 			return (result);
 		}
 	}
