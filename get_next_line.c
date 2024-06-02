@@ -93,8 +93,11 @@ int	check_n(char *str)
 	if (str == NULL)
 		return (-1);
 	while (str[i])
-	{
-		ft_putchar(str[i]);
+	{/*
+		if (str[i] == '\n')
+			ft_putchar('/');
+		else
+			ft_putchar(str[i]);*/
 		if (str[i] == '\n')
 			return (i);
 		i++;
@@ -109,10 +112,7 @@ char	*get_next_line(int fd)
 	char		*result;
 	int			i;
 
-	result = NULL;
 	i = check_n(buf);
-	printf("i : %d\n", i);
-	line = NULL;
 	if (i != -1)
 	{
 		line = buf;
@@ -120,28 +120,19 @@ char	*get_next_line(int fd)
 		if (result == NULL)
 			return (NULL);
 		rebuf(line, i);
-		return (result);
 	}
-	return (get_next_line_aux(fd, buf, i));
 }
-
+/*
 int	main(int ac, char **av)
 {
 	int	fd;
 	(void)ac;
 	fd = open(av[1], O_RDONLY);
-	get_next_line(fd);
-	get_next_line(fd);
-	/*
+	//get_next_line(fd);
+	//get_next_line(fd);
+	
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));*/
 	return (0);	
 }
+*/
