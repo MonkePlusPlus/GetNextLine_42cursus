@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:46:54 by ptheo             #+#    #+#             */
-/*   Updated: 2024/05/30 16:20:38 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/05/31 21:36:38 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ void	ft_bzero(char *buf, int len)
 
 	i = 0;
 	while (i < len)
-		buf[i++] = 0;
+	{
+		buf[i] = 0;
+		i++;
+	}
 }
 
 char	*conmalloc(char	*result, char *buf, int len)
@@ -56,6 +59,7 @@ char	*conmalloc(char	*result, char *buf, int len)
 
 	if (buf[len] == '\n')
 		len++;
+	//printf("number len : %d\n", len);
 	if (len <= 0)
 		return (result);
 	len_res = ft_strlen(result);
@@ -70,6 +74,7 @@ char	*conmalloc(char	*result, char *buf, int len)
 		final[i] = buf[i - len_res];
 		i++;
 	}
+	//ft_putstr(final);
 	final[len_res + len] = '\0';
 	free(result);
 	return (final);

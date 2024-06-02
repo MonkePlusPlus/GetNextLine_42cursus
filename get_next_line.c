@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:46:44 by ptheo             #+#    #+#             */
-/*   Updated: 2024/05/30 16:50:48 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/05/31 21:38:28 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,47 +31,75 @@ void	ft_putstr(char *str)
 	}
 }
 
-char	*get_next_line_aux(int fd, char *buf, char *result, int i)
+char	*ft_calloc(size_t length)
+{
+	size_t	i;
+	char	*result;
+
+	i = 0;
+	result = malloc(length * sizeof(char));
+	if (result == NULL)
+		return (NULL);
+	while (i < length)
+	{
+		result[i] = 0;
+		i++;
+	}
+	return (result);
+}
+
+char	*get_next_line_aux(int fd, char *buf, int i)
 {
 	char	*line;
+	char	*result;
 	int		current;
 
-	line = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	result = NULL;
+	line = ft_calloc(BUFFER_SIZE + 1);
 	if (line == NULL)
 		return (NULL);
-	ft_bzero(line, BUFFER_SIZE);
+	buf = (char *)buf;
 	buf = line;
 	current = read(fd, line, BUFFER_SIZE);
 	while (current > -1)
-	{
+	{	
 		i = 0;
+		//printf("line : %s\n", line);
 		while (line[i] && line[i] != '\n' && i < BUFFER_SIZE)
 			i++;
 		result = conmalloc(result, line, i);
+		//ft_putstr(buf);
+		//ft_putstr(result);
 		if (result == NULL)
-		{
-			free(line);
-			return (NULL);
-		}
+			return (free(line), NULL);
 		if (line[i] == '\n')
-		{
-			rebuf(line, i);
-			free(line);
-			return (result);
-		}
+			return (rebuf(line, i), result);
 		if (current == 0)
-		{
-			buf = NULL;
-			free(line);
-			return (result);
-		}
-		ft_bzero(line, BUFFER_SIZE);
+			return (buf = NULL, free(line), result);
+		ft_bzero(line, BUFFER_SIZE + 1);
 		current = read(fd, line, BUFFER_SIZE);
 	}
 	free(line);
 	free(result);
 	buf = NULL;
 	return (NULL);
+}
+
+int	check_n(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str == NULL)
+		return (-1);
+	while (str[i])
+	{
+		ft_putchar(str[i]);
+		if (str[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 char	*get_next_line(int fd)
@@ -82,39 +110,29 @@ char	*get_next_line(int fd)
 	int			i;
 
 	result = NULL;
-	i = 0;
+	i = check_n(buf);
+	printf("i : %d\n", i);
 	line = NULL;
-	if (buf != NULL)
+	if (i != -1)
 	{
 		line = buf;
-		while (line[i] && line[i] != '\n' && i < BUFFER_SIZE)
-			i++;
 		result = conmalloc(result, line, i);
 		if (result == NULL)
-		{
 			return (NULL);
-		}
-		if (line[i] == '\n')
-		{
-			rebuf(line, i);
-			free(line);
-			return (result);
-		}
-		free(line);
+		rebuf(line, i);
+		return (result);
 	}
-	return (get_next_line_aux(fd, buf, result, i));
+	return (get_next_line_aux(fd, buf, i));
 }
-/*
+
 int	main(int ac, char **av)
 {
 	int	fd;
 	(void)ac;
 	fd = open(av[1], O_RDONLY);
-	//get_next_line(fd);
-	//get_next_line(fd);
-	ft_putstr(get_next_line(fd));
-	
-	ft_putstr(get_next_line(fd));
+	get_next_line(fd);
+	get_next_line(fd);
+	/*
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
@@ -123,5 +141,7 @@ int	main(int ac, char **av)
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
 	ft_putstr(get_next_line(fd));
+	ft_putstr(get_next_line(fd));
+	ft_putstr(get_next_line(fd));*/
 	return (0);	
-}*/
+}
