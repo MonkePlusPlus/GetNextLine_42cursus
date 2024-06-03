@@ -34,7 +34,7 @@ char	*rebuf(char *buf, int len)
 		len++;
 	while (buf[len])
 		buf[i++] = buf[len++];
-	while (buf[i])
+	while (i < BUFFER_SIZE)
 		buf[i++] = '\0';
 	return (buf);
 }

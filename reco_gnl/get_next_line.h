@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 15:46:49 by ptheo             #+#    #+#             */
-/*   Updated: 2024/05/31 21:22:49 by ptheo            ###   ########.fr       */
+/*   Created: 2024/06/03 19:02:21 by ptheo             #+#    #+#             */
+/*   Updated: 2024/06/03 21:41:11 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 # include <stdio.h>
 
 char	*get_next_line(int fd);
-char	*get_next_line_aux(int fd, char *result, char *buf);
-char	*rebuf(char *buf, int len);
-char	*conmalloc(char *result, char *buf, int len);
-void	ft_bzero(char *buf, int len);
-void    ft_putstr(char *str);
-void    ft_putchar(char c);
+char	*ft_concat(char *s1, char *s2, size_t len);
+char	*ft_calloc(size_t size, size_t number);
+void	rebuf(char *buf, int len);
+void	ft_bzero(char *str);
+int		check_still(char *buf);
+int		check_n(char *buf);
 int		ft_strlen(char *str);
 
 #endif
