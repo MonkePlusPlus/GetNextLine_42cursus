@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:19 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/03 21:59:06 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/05 18:59:48 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	check_still(char *buf)
 	i = 0;
 	if (buf == NULL)
 		return (-1);
-	while (buf[i])
+	while (buf && buf[i])
 		i++;
 	return (i);
 }
@@ -37,7 +37,7 @@ int	check_n(char *buf)
 			return (i);
 		i++;
 	}
-	return (i);
+	return (-1);
 }
 char	*ft_concat(char *s1, char *s2, size_t len)
 {
@@ -63,15 +63,27 @@ char	*ft_concat(char *s1, char *s2, size_t len)
 	return (result);
 }
 
-void	rebuf(char *buf, int len)
+char	*rebuf(char *buf, int len)
 {
-	int	i;
+	char	*new_buf;
+	int		i;
 
 	i = 0;
-	while (len < BUFFER_SIZE && i < len)
-		buf[i++] = buf[len++];
-	while (i < BUFFER_SIZE)
-		buf[i++] = '\0';
+	if (buf[0] != 0)
+		new_buf = malloc(sizeof(char) * ((ft_strlen(buf) - i) + 1));
+	else
+		new_buf = NULL;
+	if (new_buf == NULL)
+		return (NULL);
+	while (buf[len])
+	{
+		new_buf[i] = buf[len];
+		len++;
+		i++;
+	}
+	new_buf[i] = '\0';
+	free(buf);
+	return (new_buf);
 } 
 
 char	*ft_calloc(size_t size, size_t number)
@@ -81,6 +93,6 @@ char	*ft_calloc(size_t size, size_t number)
 	result = malloc(number * sizeof(size));
 	if (result == NULL)
 		return (NULL);
-	ft_bzero(result);
+	ft_bzero(result, number);
 	return (result);
 }
