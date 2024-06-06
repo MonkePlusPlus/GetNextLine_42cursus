@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:19 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/05 18:59:48 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/06 16:51:58 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ int	check_n(char *buf)
 		return (-1);
 	while (buf[i])
 	{
+		//printf("buf[i] : %c\n", buf[i]);
 		if (buf[i] == '\n')
+		{
+			//printf("n : %d\n", i);
 			return (i);
+		}
 		i++;
 	}
 	return (-1);
@@ -49,16 +53,20 @@ char	*ft_concat(char *s1, char *s2, size_t len)
 	i = 0;
 	j = 0;
 	len_s1 = ft_strlen(s1);
+	//printf("buf : %s %zu\n", s2, len);
+	//printf("result : %s %zu\n", s1, len_s1);
 	result = malloc((len + len_s1 + 1) * sizeof(char));
 	if (result == NULL)
 		return (NULL);
 	while (s1 && i < len_s1)
 	{
 		result[i] = s1[i];
+		//printf("result[i] : %c\n", result[i]);
 		i++;
 	}
 	while (j < len)
 		result[i++] = s2[j++];
+	result[i] = '\0';
 	free(s1);
 	return (result);
 }
@@ -67,21 +75,24 @@ char	*rebuf(char *buf, int len)
 {
 	char	*new_buf;
 	int		i;
+	int		len_f;
 
 	i = 0;
+	len_f = (ft_strlen(buf) - i);
 	if (buf[0] != 0)
-		new_buf = malloc(sizeof(char) * ((ft_strlen(buf) - i) + 1));
+		new_buf = malloc(sizeof(char) * (len_f + 1));
 	else
 		new_buf = NULL;
 	if (new_buf == NULL)
 		return (NULL);
-	while (buf[len])
+	while (i < len && buf[len])
 	{
 		new_buf[i] = buf[len];
 		len++;
 		i++;
 	}
 	new_buf[i] = '\0';
+	//printf("new_buf : %s\n", new_buf);
 	free(buf);
 	return (new_buf);
 } 
