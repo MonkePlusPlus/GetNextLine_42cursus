@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:15 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/06 16:56:11 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/07 18:19:42 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,71 +37,90 @@ void	ft_bzero(char *str, size_t size)
 char	*get_next_line(int fd)
 {
 	static char	*stat;
+	char		**result;
 	char		*buf;
-	char		*result;
 	int			temp;
 	int			i;
 
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	result = NULL;
 	i = check_n(stat);
 	//printf("check_n call : %d\n", i);
-	buf = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+	buf = NULL;
 	if (i > -1)
-		temp = 2;
+		temp = -2;
 	else
+	{
+		buf = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+		if (buf == NULL)
+			return (NULL);
 		temp = read(fd, buf, BUFFER_SIZE);
+	}
 	while (temp > 0)
 	{
-		stat = buf;
 		//printf("buf : %s\n", buf);
 		i = check_n(buf);
 		//printf("i : %d\n", i);
 		if (i > -1)
 			break;
 		//printf("result avant : %s\n", result);
-		result = ft_concat(result, buf, BUFFER_SIZE);
+		stat = ft_concat(stat, buf, BUFFER_SIZE);
+		if (stat == NULL)
+			return (free(buf), NULL);
 		//printf("result apres : %s\n", result);
-		if (result == NULL)
-		{
-			free(buf);
-			return (NULL);
-		}
 		free(buf);
 		buf = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
-		stat = buf;
+		if (buf == NULL)
+			return (NULL);
 		temp = read(fd, buf, BUFFER_SIZE);
 	}
 	if (temp == 0)
 	{
 		free(buf);
-		stat = NULL;
-		return (result);
+		result = rebuf(stat, ft_strlen(stat));
+		if (result == NULL)
+			return (NULL);
+		buf = result[0];
+		return (stat = NULL, free(result), buf);
 	}
 	if (temp == -1)
+		return (free(stat), stat = NULL, free(buf), NULL);
+	stat = ft_concat(stat, buf, BUFFER_SIZE);
+	if (stat == NULL)
 	{
-		free(buf);
+		if (temp > 0)
+			free(buf);
 		return (NULL);
 	}
-	result = ft_concat(result, buf, i + 1);
+	result = rebuf(stat, check_n(stat) + 1);
 	if (result == NULL)
 	{
-		free(buf);
+		if (temp > 0)
+			free(buf);
 		return (NULL);
 	}
-	stat = rebuf(stat, i);
-	//printf("stat : %s\n", stat);
-	if (stat == NULL)
-		return (NULL);
-	return (result);
+	//printf("result[0] : %s\n", result[0]);
+	//printf("result[1] : %s\n", result[1]);
+	if (temp > 0)
+		free(buf);
+	buf = result[0];
+	return (stat = result[1], free(result), buf);
 }
-
+/*
 int	main(int ac, char **av)
 {
+	char	*tmp;
+	int		i = 1;
 	int	fd;
 	(void)ac;
-	fd = open(av[1], O_RDONLY);/*
+	
+	fd = open(av[1], O_RDONLY);
+	while ((tmp = get_next_line(fd)))
+	{
+		printf("%deme appel : %s", i, tmp);
+		free(tmp);
+		i++;
+	}
 	printf("1er  appel : %s", get_next_line(fd));
 	printf("2eme appel : %s", get_next_line(fd));
 	printf("3eme appel : %s", get_next_line(fd));
@@ -110,22 +129,15 @@ int	main(int ac, char **av)
 	printf("6eme appel : %s\n", get_next_line(fd));
 	printf("7eme appel : %s\n", get_next_line(fd));
 	printf("8eme appel : %s\n", get_next_line(fd));
-	printf("9eme appel : %s\n", get_next_line(fd));*/
+	printf("9eme appel : %s\n", get_next_line(fd));
+	free(get_next_line(fd));
+	free(get_next_line(fd));
+	free(get_next_line(fd));
+	free(get_next_line(fd));
 	get_next_line(fd);
 	get_next_line(fd);
 	get_next_line(fd);
-	get_next_line(fd);/*
 	get_next_line(fd);
 	get_next_line(fd);
-	get_next_line(fd);
-	get_next_line(fd);
-	get_next_line(fd);*/
-	/*
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));
-	ft_putstr(get_next_line(fd));*/
 	return (0);
-}
+}*/

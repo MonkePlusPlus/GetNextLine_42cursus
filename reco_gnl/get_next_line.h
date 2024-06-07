@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:21 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/05 18:51:38 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/07 14:58:52 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 char	*get_next_line(int fd);
 char	*ft_concat(char *s1, char *s2, size_t len);
 char	*ft_calloc(size_t size, size_t number);
-char	*rebuf(char *buf, int len);
+char	**rebuf(char *buf, int len);
 void	ft_bzero(char *str, size_t size);
 int		check_still(char *buf);
 int		check_n(char *buf);
