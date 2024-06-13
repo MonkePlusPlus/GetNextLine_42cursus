@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:15 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/13 16:21:36 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/13 16:32:37 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*get_next_line(int fd)
 	{
 		result = rebuf(stat[fd], check_n(stat[fd]) + 1);
 		if (result == NULL)
-			return (NULL);
+			return (stat[fd] = NULL, NULL);
 		return (temp = result[0], stat[fd] = result[1], free(result), temp);
 	}
 	result = get_next_line_aux(fd, stat[fd]);

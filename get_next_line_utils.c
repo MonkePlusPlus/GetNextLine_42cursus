@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:19 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/13 16:17:42 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/13 16:50:02 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ char	**resmalloc(int len, int len_f)
 		new_buf[1] = (char *)malloc(sizeof(char) * (len_f + 1));
 		if (new_buf[1] == NULL)
 			return (free(new_buf[0]), free(new_buf), NULL);
-		ft_bzero(new_buf[1], len_f);
 	}
 	else
 		new_buf[1] = NULL;
@@ -85,7 +84,7 @@ char	**rebuf(char *buf, int len)
 		return (NULL);
 	len_f = ft_strlen(buf) - len;
 	if (buf[0] == 0)
-		return (NULL);
+		return (free(buf), buf = NULL, NULL);
 	new_buf = resmalloc(len, len_f);
 	if (new_buf == NULL)
 		return (free(buf), buf = NULL, NULL);

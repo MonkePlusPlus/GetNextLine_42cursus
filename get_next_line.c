@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:15 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/13 16:16:44 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/13 17:00:02 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	**get_next_line_aux(int fd, char *stat)
 
 	buf = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (buf == NULL)
-		return (free(stat), stat = NULL, NULL);
+		return (stat = NULL, NULL);
 	temp = read(fd, buf, BUFFER_SIZE);
 	while (temp > 0)
 	{
@@ -85,7 +85,7 @@ char	*get_next_line(int fd)
 	{
 		result = rebuf(stat, check_n(stat) + 1);
 		if (result == NULL)
-			return (NULL);
+			return (stat = NULL, NULL);
 		return (temp = result[0], stat = result[1], free(result), temp);
 	}
 	result = get_next_line_aux(fd, stat);
