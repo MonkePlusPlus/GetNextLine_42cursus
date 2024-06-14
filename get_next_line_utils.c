@@ -6,7 +6,7 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:19 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/13 16:50:02 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/14 15:01:03 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_concat(char *s1, char *s2, size_t len)
 		return (s1);
 	result = (char *)malloc((len + len_s1 + 1) * sizeof(char));
 	if (result == NULL)
-		return (free(s1), free(s2), NULL);
+		return (free(s1), free(s2), s1 = NULL, NULL);
 	while (s1 && i < len_s1)
 	{
 		result[i] = s1[i];
