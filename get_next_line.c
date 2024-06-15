@@ -6,20 +6,39 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:15 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/14 15:01:02 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/15 17:18:55 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *str)
+char	*ft_strdup(char *s)
 {
-	int	i;
+	char	*result;
+	int		i;
+	int		len;
 
+	if (s == NULL)
+	{
+		result = malloc(sizeof(char) * 1);
+		if (result == NULL)
+			return (NULL);
+		return (result[0] = '\0', result);
+	}
 	i = 0;
-	while (str && str[i])
+	len = 0;
+	while (s[len])
+		len++;
+	result = malloc((len + 1) * sizeof(char));
+	if (result == NULL)
+		return (free(s), NULL);
+	while (i < len)
+	{
+		result[i] = s[i];
 		i++;
-	return (i);
+	}
+	free(s);
+	return (result[i] = '\0', result);
 }
 
 char	*ft_strlcpy(char *dest, char *src, int start, int end)
@@ -52,25 +71,25 @@ char	**get_next_line_aux(int fd, char *stat)
 
 	buf = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 	if (buf == NULL)
-		return (stat = NULL, NULL);
+		return (free(stat), NULL);
 	temp = read(fd, buf, BUFFER_SIZE);
 	while (temp > 0)
 	{
 		stat = ft_concat(stat, buf, BUFFER_SIZE);
 		if (stat == NULL)
 			return (NULL);
-		if (check_n(stat) > -1)
+		if (check_n_len(stat, 1) > -1)
 			break ;
 		buf = ft_calloc(sizeof(char), BUFFER_SIZE + 1);
 		if (buf == NULL)
-			return (free(stat), stat = NULL, NULL);
+			return (free(stat), NULL);
 		temp = read(fd, buf, BUFFER_SIZE);
 	}
 	if (temp == -1)
-		return (free(buf), NULL);
+		return (free(stat), free(buf), NULL);
 	if (temp == 0)
-		return (free(buf), rebuf(stat, ft_strlen(stat)));
-	return (rebuf(stat, check_n(stat) + 1));
+		return (free(buf), rebuf(stat, check_n_len(stat, 0)));
+	return (rebuf(stat, check_n_len(stat, 1) + 1));
 }
 
 char	*get_next_line(int fd)
@@ -81,20 +100,19 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (check_n(stat) > -1)
+	if (check_n_len(stat, 1) > -1)
 	{
-		result = rebuf(stat, check_n(stat) + 1);
+		result = rebuf(stat, check_n_len(stat, 1) + 1);
 		if (result == NULL)
 			return (stat = NULL, NULL);
 		return (temp = result[0], stat = result[1], free(result), temp);
 	}
-	result = get_next_line_aux(fd, stat);
-	if (result == NULL)
-	{
-		if (stat != NULL)
-			free(stat);
+	temp = ft_strdup(stat);
+	if (temp == NULL)
 		return (stat = NULL, NULL);
-	}
+	result = get_next_line_aux(fd, temp);
+	if (result == NULL)
+		return (stat = NULL, NULL);
 	return (temp = result[0], stat = result[1], free(result), temp);
 }
 /*

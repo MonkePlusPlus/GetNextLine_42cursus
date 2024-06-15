@@ -6,26 +6,28 @@
 /*   By: ptheo <ptheo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 19:02:19 by ptheo             #+#    #+#             */
-/*   Updated: 2024/06/14 15:01:03 by ptheo            ###   ########.fr       */
+/*   Updated: 2024/06/15 17:18:56 by ptheo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	check_n(char *buf)
+int	check_n_len(char *buf, int len)
 {
 	int	i;
 
 	i = 0;
-	if (buf == NULL)
+	if (buf == NULL && len)
 		return (-1);
-	while (buf[i])
+	while (buf && buf[i])
 	{
-		if (buf[i] == '\n')
+		if (buf[i] == '\n' && len)
 			return (i);
 		i++;
 	}
-	return (-1);
+	if (len)
+		return (-1);
+	return (i);
 }
 
 char	*ft_concat(char *s1, char *s2, size_t len)
@@ -37,13 +39,13 @@ char	*ft_concat(char *s1, char *s2, size_t len)
 
 	i = 0;
 	j = 0;
-	len_s1 = ft_strlen(s1);
+	len_s1 = check_n_len(s1, 0);
 	if (s2 == NULL)
 		return (s1);
 	result = (char *)malloc((len + len_s1 + 1) * sizeof(char));
 	if (result == NULL)
-		return (free(s1), free(s2), s1 = NULL, NULL);
-	while (s1 && i < len_s1)
+		return (free(s1), free(s2), NULL);
+	while (s1 && s1[i] && i < len_s1)
 	{
 		result[i] = s1[i];
 		i++;
@@ -82,16 +84,16 @@ char	**rebuf(char *buf, int len)
 
 	if (buf == NULL)
 		return (NULL);
-	len_f = ft_strlen(buf) - len;
+	len_f = check_n_len(buf, 0) - len;
 	if (buf[0] == 0)
-		return (free(buf), buf = NULL, NULL);
+		return (free(buf), NULL);
 	new_buf = resmalloc(len, len_f);
 	if (new_buf == NULL)
-		return (free(buf), buf = NULL, NULL);
+		return (free(buf), NULL);
 	new_buf[0] = ft_strlcpy(new_buf[0], buf, 0, len);
 	if (new_buf[1] != NULL)
 		new_buf[1] = ft_strlcpy(new_buf[1], buf, len, len_f);
-	return (free(buf), buf = NULL, new_buf);
+	return (free(buf), new_buf);
 }
 
 char	*ft_calloc(size_t size, size_t number)
